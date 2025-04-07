@@ -1,10 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { ExpensesService } from './expenses.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 
 @ApiTags('Expenses')
-@Controller('expenses') // Define a roda base: /expenses
+@Controller('expenses') // Define a rota base: /expenses
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
@@ -15,6 +24,19 @@ export class ExpensesController {
     return this.expensesService.create(dto);
   }
 
+  @Get(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'Despesa retornada com sucesso.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Despesa não encontrada.',
+  })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.expensesService.findOne(id);
+  }
+
   @Get()
   @ApiResponse({
     status: 200,
@@ -22,5 +44,23 @@ export class ExpensesController {
   })
   findAll() {
     return this.expensesService.findAll();
+  }
+
+  @Patch(':id')
+  @ApiBody({ type: CreateExpenseDto })
+  @ApiResponse({ status: 200, description: 'Despesa atualizada com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Despesa não encontrada.' })
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: Partial<CreateExpenseDto>,
+  ) {
+    return this.expensesService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @ApiResponse({ status: 200, description: 'Despesa removida com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Despesa não encontrada.' })
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.expensesService.remove(id);
   }
 }
