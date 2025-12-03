@@ -48,5 +48,5 @@ Frontend: http://localhost:5173
 Backend: http://localhost:3000
 ```
 
-📚 Objetivo do Projeto
+📚 Objetivo do Projeto:
 Este projeto foi criado com o objetivo de estudo, desenvolvimento prático e como parte da minha jornada para conquistar minha primeira vaga como desenvolvedor júnior.
